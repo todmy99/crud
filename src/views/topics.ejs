@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD - Temas</title>
+</head>
+<body>
+    <h1>Temas de aprendizaje</h1>
+
+    <!-- Formulario para crear un nuevo tema -->
+    <section>
+        <h2>Agregar nuevo tema</h2>
+        <form action="/topics" method="POST">
+            <div>
+                <label for="title">Título:</label>
+                <input type="text" id="title" name="title" required />
+            </div>
+            <div>
+                <label for="description">Descripción:</label>
+                <textarea id="description" name="description"></textarea>
+            </div>
+            <button type="submit">Crear tema</button>
+        </form>
+    </section>
+
+    <hr />
+
+    <section>
+        <h2>Lista de temas (ordenados por votos)</h2>
+        <div id="topics-list">
+            <ul>
+                <% if (topics.length === 0) { %>
+                    <li>No hay temas aún. ¡Agrega el primero!</li>
+                <% } else { %>
+                    <% topics.forEach(function(topic) { %>
+                        <li style="margin-bottom: 2rem; border-bottom: 1px solid #ccc; padding-bottom: 1rem;">
+                            <strong><%= topic.title %></strong>
+                            (<span class="topic-votes" data-topic-id="<%= topic.id %>">
+                                <%= topic.votes %>
+                            </span> votos)
+                            <br />
+                            <em><%= topic.description %></em>
+                            <br />
+
+                            <!-- Botón para votar este tema -->
+                            <button
+                                type="button"
+                                class="btn-vote-topic"
+                                data-topic-id="<%= topic.id %>">
+                                Votar tema
+                            </button>
+
+                            <!-- Formulario para actualizar el tema -->
+                            <div style="margin-top: 0.5rem;">
+                                <h4>Editar tema</h4>
+                                <form action="/topics/<%= topic.id %>/update" method="POST">
+                                    <div>
+                                        <label>Título:</label>
+                                        <input type="text" name="title" value="<%= topic.title %>" required />
+                                    </div>
+                                    <div>
+                                        <label>Descripción:</label>
+                                        <input type="text" name="description" value="<%= topic.description %>" />
+                                    </div>
+                                    <button type="submit">Guardar cambios</button>
+                                </form>
+                            </div>
+
+                            <!-- Formulario para eliminar el tema -->
+                            <div style="margin-top: 0.5rem;">
+                                <form action="/topics/<%= topic.id %>/delete" method="POST" onsubmit="return confirm('¿Seguro que quieres eliminar este tema?');">
+                                    <button type="submit">Eliminar tema</button>
+                                </form>
+                            </div>
+
+                            <hr />
+
+                            <!-- Enlaces del tema -->
+                            <div>
+                                <h3>Enlaces</h3>
+
+                                <!-- Formulario para agregar un enlace a este tema -->
+                                <form action="/topics/<%= topic.id %>/links" method="POST" style="margin-bottom: 0.5rem;">
+                                    <div>
+                                        <label>URL:</label>
+                                        <input type="url" name="url" required />
+                                    </div>
+                                    <div>
+                                        <label>Descripción:</label>
+                                        <input type="text" name="description" />
+                                    </div>
+                                    <button type="submit">Agregar enlace</button>
+                                </form>
+
+                                <!-- Lista de enlaces -->
+                                <ul>
+                                    <% if (!topic.links || topic.links.length === 0) { %>
+                                        <li>Este tema aún no tiene enlaces.</li>
+                                    <% } else { %>
+                                        <% topic.links.forEach(function(link) { %>
+                                            <li style="margin-bottom: 0.5rem;">
+                                                <a href="<%= link.url %>" target="_blank">
+                                                    <%= link.description || link.url %>
+                                                </a>
+                                                (<span
+                                                        class="link-votes"
+                                                        data-topic-id="<%= topic.id %>"
+                                                        data-link-id="<%= link.id %>">
+                                                    <%= link.votes %>
+                                                </span> votos)
+
+                                                <button
+                                                    type="button"
+                                                    class="btn-vote-link"
+                                                    data-topic-id="<%= topic.id %>"
+                                                    data-link-id="<%= link.id %>">
+                                                    Votar enlace
+                                                </button>
+
+                                                <!-- Formulario para actualizar enlace -->
+                                                <div style="margin-top: 0.3rem;">
+                                                    <form action="/topics/<%= topic.id %>/links/<%= link.id %>/update" method="POST">
+                                                        <div>
+                                                            <label>URL:</label>
+                                                            <input type="url" name="url" value="<%= link.url %>" required />
+                                                        </div>
+                                                        <div>
+                                                            <label>Descripción:</label>
+                                                            <input type="text" name="description" value="<%= link.description %>" />
+                                                        </div>
+                                                        <button type="submit">Guardar cambios enlace</button>
+                                                    </form>
+                                                </div>
+
+                                                <!-- Formulario para eliminar enlace -->
+                                                <div style="margin-top: 0.3rem;">
+                                                    <form action="/topics/<%= topic.id %>/links/<%= link.id %>/delete" method="POST" onsubmit="return confirm('¿Eliminar este enlace?');">
+                                                        <button type="submit">Eliminar enlace</button>
+                                                    </form>
+                                                </div>
+                                            </li>
+                                        <% }); %>
+                                    <% } %>
+                                </ul>
+                            </div>
+                        </li>
+                    <% }); %>
+                <% } %>
+            </ul>
+        </div>
+    </section>
+
+    <script src="/main.js"></script>
+</body>
+</html>

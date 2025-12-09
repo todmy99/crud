@@ -1,0 +1,41 @@
+{
+  "topics": [
+    {
+      "id": 2,
+      "title": "Aprender a jugar fortnite",
+      "description": "Ser pro en BR",
+      "votes": 5,
+      "links": [
+        {
+          "id": 2,
+          "url": "https://youtube.com",
+          "description": "tryhard",
+          "votes": 2
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Programar en JS",
+      "description": "asd",
+      "votes": 5,
+      "links": []
+    },
+    {
+      "id": 1,
+      "title": "Como beber coca cola",
+      "description": "Aprende a tomar coca cola",
+      "votes": 4,
+      "links": [
+        {
+          "id": 1,
+          "url": "https://cocacola.com",
+          "description": "Aprende a beber coca",
+          "votes": 3
+        }
+      ]
+    }
+  ],
+  "nextTopicId": 4,
+  "nextLinkId": 3
+}
